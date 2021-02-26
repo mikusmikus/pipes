@@ -1,0 +1,47 @@
+@import '../../styles/index.scss';
+
+.wrapper {
+    width: 100%;
+    min-height: 20px;
+    padding-top: 100%;
+    position:relative;
+    border:1px solid $color-primary-dark;
+    cursor: pointer;
+  }
+
+  .wrapper:hover {
+      background-color: $color-secondary-light;
+  }
+  
+  .pipe {
+    position: absolute;
+    background-color: $color-secondary-dark;
+  }
+  
+  .top {
+    width: 20%;
+    height: 60%;
+    left: 40%;
+    top: 0%;
+  }
+  
+  .right {
+    width: 60%;
+    height: 20%;
+    left: 40%;
+    top: 40%;
+  }
+  
+  .bottom {
+    width: 20%;
+    height: 60%;
+    left: 40%;
+    top: 40%;
+  }
+  
+  .left {
+    width: 60%;
+    height: 20%;
+    left: 0%;
+    top: 40%;
+  }

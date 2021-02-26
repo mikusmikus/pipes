@@ -1,0 +1,50 @@
+@import "../../styles/index.scss";
+
+.header {
+  position: relative;
+  padding: 30px;
+  background-color: $color-primary-dark;
+  background-image: url("../../assets/pipes.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.heading {
+  color: $color-primary-light;
+  padding: 0 2rem;
+  font-size: 4rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 2px;
+  animation: headingMove 2s ease-in-out;
+  animation-iteration-count: 1;
+}
+.buttonWrapper{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  @include flex()
+}
+
+@keyframes headingMove {
+  0% {
+    transform: translateX(-100vh);
+  }
+  70% {
+    transform: translateX(20vh);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media only screen and (max-width: 48rem) {
+  .buttonWrapper{
+    position: absolute;
+    display: block;
+    height: auto;
+    top: 100%;
+    right: 0;
+    transform: translateY(-100%);
+  }
+}

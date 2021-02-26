@@ -1,0 +1,15 @@
+@mixin flex($direction : row) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @mixin hover-lift($time: 0.2) {
+    transition: all #{$time}s;
+    &:hover,
+    &:focus {
+      transform: scale(1.05);
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    }
+  }

@@ -1,0 +1,21 @@
+@import '../../styles/index.scss';
+
+.options{
+    padding: 10px 20px;
+    min-height: 150px;
+    animation: optionsMove 2s ease-in-out;
+    animation-iteration-count: 1;
+}
+
+
+  @keyframes optionsMove {
+    0% {
+      transform: translateX(100vh);
+    }
+    70% {
+      transform: translateX(-10vh);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }

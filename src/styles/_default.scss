@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+body {
+    background-color: $color-background;
+    // background-color: rgb(241, 241, 85);
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+}
+.main-content{
+  background-color: white;
+  min-height: calc(100vh - 148px);
+}
+@media only screen and (max-width: 48rem) {
+    html {
+      font-size: 12px;
+    }
+  }

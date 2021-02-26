@@ -1,0 +1,62 @@
+@import "../../styles/index.scss";
+
+.rulesWrapper{
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: $color-primary-dark;
+    opacity: 0;
+    transition: all 0.5s;
+    overflow: hidden;
+    @include flex()
+
+  }
+  .rulesActive{
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100vh;
+  }
+  .rules{
+    position: relative;
+    font-size: 1rem;
+    min-height: 60vh;
+    font-weight: 700;
+    // background-color: $color-primary-light;
+    background-image: url('https://i.pinimg.com/originals/0d/15/fa/0d15fa2575d1c52def6e11f8993bfac3.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 3rem 2rem;
+    text-align: left;
+    color: $color-primary-dark;
+    .buttonWrapper{
+        position: relative;
+        text-align: center;
+    }
+    h1{
+        position: relative;
+        color: $color-primary-dark;
+        text-align: center;
+        font-size: 4em;
+        font-weight: 900;
+    }
+    ul{
+        margin-bottom: 2rem;
+    }
+    li{
+        position: relative;
+        font-size: 2em;
+    }
+}
+  .overlay{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5);
+  }
+
+ 

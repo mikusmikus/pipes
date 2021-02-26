@@ -1,0 +1,38 @@
+@import "../../styles/index.scss";
+
+.button {
+  background-color: $color-primary-light;
+  color: $color-secondary-dark;
+  padding: 0.5em 1em;
+  margin:0.3em;
+  border: none;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+  @include hover-lift()
+}
+.dark {
+  background-color: $color-secondary-dark;
+  color: $color-secondary-light;
+}
+.danger {
+  background-color: $color-danger;
+  color: $color-secondary-dark;
+}
+.warning {
+  background-color: $color-warning;
+  color: $color-secondary-dark;
+}
+.success {
+  background-color: $color-success;
+  color: $color-secondary-dark;
+}
+.small{
+  font-size: 1rem;
+}
+.medium{
+  font-size: 1.25rem;
+}
+.large{
+  font-size: 2rem;
+}

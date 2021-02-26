@@ -1,0 +1,17 @@
+.fancyGrid{
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: auto;
+  max-height: 900px;
+}
+.grid{
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 0;
+  }
+  
+  

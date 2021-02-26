@@ -1,0 +1,26 @@
+@import '../../styles/index.scss';
+
+
+.simpleGrid{
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: auto;
+    max-height: 900px;
+}
+.grid{
+    display: flex;
+    line-height: 1;
+}
+.pipe{
+    cursor: pointer;
+    &:hover {
+        background-color: $color-secondary-light;
+    }
+    &:active{
+        background-color: $color-danger;
+    }
+}
+.isDone{
+    background-color: $color-warning;
+}
