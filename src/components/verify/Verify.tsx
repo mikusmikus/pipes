@@ -1,21 +1,21 @@
 import React, { FC, useEffect, useRef } from "react";
 import { WhatRender } from "../../App";
 import Button from "../button/Button";
-import style from "./history.module.scss";
+import style from "./verify.module.scss";
 
 type Props = {
   counter: number;
-  history: string;
   verifyMsg: string;
+  verifyResponde: string;
   textAreaRef?: React.RefObject<HTMLTextAreaElement>;
   whatRender: WhatRender;
   level:number;
   onVerifyClick: () => void;
 };
-const History: FC<Props> = ({
+const Verify: FC<Props> = ({
   counter,
-  history,
   verifyMsg,
+  verifyResponde,
   whatRender,
   level,
   onVerifyClick,
@@ -28,7 +28,7 @@ const History: FC<Props> = ({
       textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight;
     }
   });
-  const showHistory = () => {
+  const showVerifyMsg = () => {
     if (stopSolveBtn && level<4) 
     return true
     if (!stopSolveBtn){
@@ -38,15 +38,15 @@ const History: FC<Props> = ({
   }
 
   return (
-    <div className={style.historyWrapper}>
-      {showHistory() &&(
+    <div className={style.verifyMsgWrapper}>
+      {showVerifyMsg() &&(
         <>
       <h4>MOVE COUNTER: {counter}</h4>
       <div>
         <textarea
           ref={textAreaRef}
-          value={history}
-          className={style.historyArea}
+          value={verifyMsg}
+          className={style.verifyMsgArea}
           readOnly
         />
       </div>
@@ -59,11 +59,11 @@ const History: FC<Props> = ({
               VERIFY
             </Button>
           </div>
-          <div className='verify'>{verifyMsg && <h3>{verifyMsg}</h3>}</div>
+          <div className='verify'>{verifyResponde && <h3>{verifyResponde}</h3>}</div>
         </>
       )}
     </div>
   );
 };
 
-export default History;
+export default Verify;

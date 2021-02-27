@@ -1,9 +1,9 @@
 @import '../../styles/index.scss';
 
-.historyWrapper{
+.verifyMsgWrapper{
     margin-top: 8rem;
 }
-.historyArea{
+.verifyMsgArea{
     padding: 5px 10px;
     width: 20rem;
     height: 20rem;
@@ -17,7 +17,7 @@
   }
   
   @media only screen and (max-width: 48rem) {
-    .historyWrapper{
+    .verifyMsgWrapper{
     margin-top: 1rem;
     }
   }

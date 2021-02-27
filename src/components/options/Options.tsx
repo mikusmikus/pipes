@@ -24,7 +24,7 @@ const Options: FC<Props> = ({
 }) => {
   const {
     levelsBtns,
-    startGame,
+    startGameBtn,
     startSolveBtn,
     stopSolveBtn,
     restartBtn,
@@ -34,7 +34,7 @@ const Options: FC<Props> = ({
       {levelsBtns && (
         <div className='row center-xs'>
           <div className='col-xs-12'>
-            <h1>Select difficulty Level</h1>
+            <h2>Select difficulty Level</h2>
             {levels.map((level, index) => (
               <Button
                 key={level}
@@ -50,7 +50,7 @@ const Options: FC<Props> = ({
       )}
       <div className='row middle-xs center-xs'>
         <div className='col-xs-8'>
-          {startGame && (
+          {startGameBtn && (
             <Button size='large' color='warning' onClick={onStartClick}>
               Start Game
             </Button>
@@ -67,7 +67,7 @@ const Options: FC<Props> = ({
           )}
           {restartBtn && (
             <Button size='medium' color='dark' onClick={onRestartClick}>
-              {startGame ? "Back" : "Restart game"}
+              {startGameBtn ? "Back" : "Restart game"}
             </Button>
           )}
         </div>

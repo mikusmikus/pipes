@@ -12,15 +12,16 @@ import {
 } from "./engine";
 import Options from "./components/options/Options";
 import Heading from "./components/header/Header";
-import History from "./components/history/History";
+import Verify from "./components/verify/Verify";
 import FancyGrid from "./components/fancyGrid/FancyGrid";
 import SimpleGrid from "./components/simpleGrid/SimpleGrid";
 import Slider from "./components/slider/Slider";
+import ResultsTable from "./components/resultsTable/ResultsTable";
 
 export interface WhatRender {
   levelsBtns: boolean;
   fancyGrid: boolean;
-  startGame: boolean;
+  startGameBtn: boolean;
   startSolveBtn: boolean;
   stopSolveBtn: boolean;
   simpleGrid: boolean;
@@ -40,16 +41,16 @@ let cellWidth = "";
 
 function App() {
   const [grid, setGrid] = useState<Pipe[][]>([]);
-  const [history, setHistory] = useState("rotate");
+  const [verifyMsg, setVerifyMsg] = useState("rotate");
   const [counter, setCounter] = useState(0);
   const [autoSolve, setAutoSolve] = useState(false);
-  const [verifyMsg, setVerifyMsg] = useState("");
+  const [verifyResponde, setVerifyResponde] = useState("");
   const [autoSolveTime, setAutoSolveTime] = useState(2);
   const [whatRender, setWhatRender] = useState({
     levelsBtns: true,
     fancyGrid: false,
     simpleGrid: false,
-    startGame: false,
+    startGameBtn: false,
     startSolveBtn: false,
     stopSolveBtn: false,
     restartBtn: false,
@@ -70,14 +71,22 @@ function App() {
     const info: string = msg.data as string;
     console.log("info", info);
     if (info.startsWith("verify: Correct")) {
-      setVerifyMsg(info);
+      setVerifyResponde(info);
     }
     if (info.startsWith("verify: Incorrect")) {
-      setVerifyMsg(`${info} Something is not connecting right, keep solving`);
+      setVerifyResponde(
+        `${info} Something is not connecting right, keep solving`
+      );
     }
     mapAsString.current = info;
   };
-  // console.log("mapAsString.current", mapAsString.current);
+
+  // string to bytes
+  const byteCount =(s: string) => {
+    return encodeURI(s).split(/%..|./).length - 1;
+  }
+
+
 
   useEffect(() => {
     if (grid.length && autoSolve) {
@@ -111,13 +120,13 @@ function App() {
           xx.current,
           yy.current,
           grid,
-          history,
+          verifyMsg,
           pipesToSolve.current
         );
 
-        if (rotateMessage.length !== history.length) {
+        if (rotateMessage.length !== verifyMsg.length) {
           rotateCount.current = counter;
-          setHistory(rotateMessage);
+          setVerifyMsg(rotateMessage);
         }
 
         pipesToSolve.current = pipesLeft;
@@ -126,11 +135,9 @@ function App() {
           return;
         }
         setCounter(counter + 1);
-      }, autoSolveTime*200);
+      }, autoSolveTime * 200);
     }
   }, [counter, autoSolve]);
-
-
 
   const setLevel = (level: number) => {
     client.send(`new ${level}`);
@@ -139,12 +146,12 @@ function App() {
     setWhatRender({
       ...whatRender,
       levelsBtns: false,
-      startGame: true,
+      startGameBtn: true,
       restartBtn: true,
     });
   };
 
-  const startGame = () => {
+  const startGameBtn = () => {
     const step1 = splitRawDataInShapeRows(mapAsString.current);
     const step2 = makeShapeGridFromRows(step1);
     const step3 = transformShapeGridToPipeGrid(step2);
@@ -152,11 +159,11 @@ function App() {
     cellWidth = `${100 / step2[0].length}%`;
     pipesToSolve.current = totalPipes.current;
     setGrid(step3);
-    setHistory("rotate");
+    setVerifyMsg("rotate");
     if (currentLevel.current <= 3) {
       setWhatRender({
         ...whatRender,
-        startGame: false,
+        startGameBtn: false,
         restartBtn: true,
         startSolveBtn: true,
         fancyGrid: true,
@@ -165,7 +172,7 @@ function App() {
     } else {
       setWhatRender({
         ...whatRender,
-        startGame: false,
+        startGameBtn: false,
         restartBtn: true,
         startSolveBtn: true,
         // simpleGrid: true,
@@ -174,18 +181,18 @@ function App() {
     }
   };
 
-  const restartGame = () => {
-    setHistory("rotate");
+  const restartGameBtn = () => {
+    setVerifyMsg("rotate");
     setCounter(0);
     xx.current = 0;
     yy.current = 0;
     clearTimeout(timeOut.current!);
     setAutoSolve(false);
-    setVerifyMsg("");
+    setVerifyResponde("");
     setWhatRender({
       ...whatRender,
       levelsBtns: true,
-      startGame: false,
+      startGameBtn: false,
       restartBtn: false,
       startSolveBtn: false,
       stopSolveBtn: false,
@@ -203,7 +210,7 @@ function App() {
     }
 
     setAutoSolve(true);
-    setVerifyMsg("");
+    setVerifyResponde("");
     setWhatRender({
       ...whatRender,
       startSolveBtn: false,
@@ -232,8 +239,8 @@ function App() {
     setCounter(counter + 1);
     const newGrid = [...grid];
     grid[y][x] = rotatePipe(newGrid[y][x]);
-    setHistory(appendRotateMessage(history, x, y));
-    setVerifyMsg("");
+    setVerifyMsg(appendRotateMessage(verifyMsg, x, y));
+    setVerifyResponde("");
     setGrid(newGrid);
   };
 
@@ -255,9 +262,9 @@ function App() {
   };
 
   const verifyResults = () => {
-    client.send(history);
+    client.send(verifyMsg);
     client.send("verify");
-    setHistory("rotate");
+    setVerifyMsg("rotate");
   };
 
   return (
@@ -270,11 +277,18 @@ function App() {
               whatRender={whatRender}
               levels={levels}
               onLevelClick={setLevel}
-              onStartClick={startGame}
+              onStartClick={startGameBtn}
               onAutoSolveClick={startAutoSolve}
               onStopAutoSolveClick={stopAutoSolve}
-              onRestartClick={restartGame}
+              onRestartClick={restartGameBtn}
             />
+            {whatRender.levelsBtns && (
+              <ResultsTable
+                verifyResponde={verifyResponde}
+                currentLevel={currentLevel.current}
+                levels={levels}
+              />
+            )}
             {currentLevel.current < 3 && whatRender.fancyGrid && (
               <Slider
                 min={0}
@@ -310,11 +324,11 @@ function App() {
             />
           </div>
           <div className='col-sm-3 col-xs-12 center-xs'>
-            <History
+            <Verify
               whatRender={whatRender}
-              history={history}
-              counter={counter}
               verifyMsg={verifyMsg}
+              counter={counter}
+              verifyResponde={verifyResponde}
               level={currentLevel.current}
               onVerifyClick={verifyResults}
             />
