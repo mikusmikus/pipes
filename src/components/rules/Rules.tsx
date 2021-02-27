@@ -9,9 +9,10 @@ type Props = {
 const rules = [
   "Pipes is a classic game where you can exercise your plumbing skills.",
   "You have to connect all pipes on the board.",
-  "Use mouse left click to rotate pipe clockwise",
-  "Use mouse right click to lock/ unlock the pipe",
-  "When all pipes are connected, press 'verify' to check if game is solved.",
+  "Use mouse left click to rotate pipe clockwise.",
+  "Use mouse right click to lock/ unlock the pipe.",
+  "When all pipes are connected, press 'verify' to check if game is solved and get the password.",
+  "Get all 6 passwords to be the Pipe Master!!!"
 ];
 const Rules: FC<Props> = ({ showRules, onRulesClick }) => {
   return (

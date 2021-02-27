@@ -82,11 +82,9 @@ function App() {
   };
 
   // string to bytes
-  const byteCount =(s: string) => {
+  const byteCount = (s: string) => {
     return encodeURI(s).split(/%..|./).length - 1;
-  }
-
-
+  };
 
   useEffect(() => {
     if (grid.length && autoSolve) {
@@ -282,13 +280,12 @@ function App() {
               onStopAutoSolveClick={stopAutoSolve}
               onRestartClick={restartGameBtn}
             />
-            {whatRender.levelsBtns && (
-              <ResultsTable
-                verifyResponde={verifyResponde}
-                currentLevel={currentLevel.current}
-                levels={levels}
-              />
-            )}
+            <ResultsTable
+              verifyResponde={verifyResponde}
+              currentLevel={currentLevel.current}
+              levels={levels}
+              whatRender={whatRender}
+            />
             {currentLevel.current < 3 && whatRender.fancyGrid && (
               <Slider
                 min={0}
