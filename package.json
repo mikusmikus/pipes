@@ -2,7 +2,7 @@
   "name": "pipes-task",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://mikusmikus.github.io/pipes",
+  "homepage": "https://mikusmikus.github.io/pipes",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",

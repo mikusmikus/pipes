@@ -28,7 +28,7 @@ export interface WhatRender {
   verify: boolean;
   info: boolean;
 }
-const client = new w3cwebsocket("ws://hometask.eg1236.com/game-pipes/");
+const client = new w3cwebsocket("wss://hometask.eg1236.com/game-pipes/");
 
 client.onopen = () => {
   console.log("Connected");
