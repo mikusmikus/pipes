@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Button from "../../common-components/button/Button";
+import Button from "../button/Button";
 import style from "./rules.module.scss";
 
 type Props = {
@@ -8,9 +8,10 @@ type Props = {
 };
 const rules = [
   "Pipes is a classic game where you can exercise your plumbing skills.",
-  "You have to connect all pipes on the board so the water can flow through them.",
-  "Use mouse left click to rotate clockwise",
-  "Use mouse right click to lock the pipe",
+  "You have to connect all pipes on the board.",
+  "Use mouse left click to rotate pipe clockwise",
+  "Use mouse right click to lock/ unlock the pipe",
+  "When all pipes are connected, press 'verify' to check if game is solved.",
 ];
 const Rules: FC<Props> = ({ showRules, onRulesClick }) => {
   return (

@@ -126,7 +126,7 @@ export const translateFromShapeToPipe = (
     }
   }
 };
-export const translatePipeToShape = (pipe: Pipe): ShapeType => {
+export const translateFromPipeToShape = (pipe: Pipe): ShapeType => {
   const { top, right, bottom, left } = pipe;
   const pipePositions = [top, right, bottom, left];
   switch (JSON.stringify(pipePositions)) {

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { WhatRender } from "../../App";
-import Button from "../../common-components/button/Button";
+import Button from "../button/Button";
 import style from "./options.module.scss";
 
 type Props = {
@@ -56,7 +56,7 @@ const Options: FC<Props> = ({
             </Button>
           )}
           {startSolveBtn && (
-            <Button size='large' color='danger' onClick={onAutoSolveClick}>
+            <Button size='large' color='warning' onClick={onAutoSolveClick}>
               Start Auto Solve
             </Button>
           )}

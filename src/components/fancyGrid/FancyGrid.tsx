@@ -13,9 +13,7 @@ type Props = {
   yy: number;
   level: number;
   whatRender: WhatRender;
-  autoSolveTime: number;
   cellClickHandler: (x: number, y: number, pipe: Pipe) => void;
-  onSliderChange: (value: number) => void;
   rightClickHandler: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     x: number,
@@ -30,8 +28,6 @@ const FancyGrid: FC<Props> = ({
   yy,
   level,
   whatRender,
-  autoSolveTime,
-  onSliderChange,
   cellClickHandler,
   rightClickHandler,
 }) => {
@@ -49,43 +45,30 @@ const FancyGrid: FC<Props> = ({
   return (
     <div className={style.fancyGrid}>
       {fancyGrid && level > 2 && stopSolveBtn && <Spinner />}
-      {showFancyGrid() && (
-        <>
-          {level < 3 && (
-            <Slider
-              min={0}
-              max={5}
-              value={autoSolveTime}
-              onChange={(value) => {
-                onSliderChange(value);
-              }}
-            />
-          )}
-          {grid.map((row, y) => {
-            return (
-              <div className={style.grid} key={`key${y}`}>
-                {row.map((pipe, x) => {
-                  return (
-                    <div
-                      key={`key${y}${x}`}
-                      style={{ width: cellWidth, minWidth: "30px" }}
-                    >
-                      <Cell
-                        pipe={pipe}
-                        isActive={xx === x && yy === y}
-                        onClick={() => cellClickHandler(x, y, pipe)}
-                        onRightClick={(
-                          e: React.MouseEvent<HTMLDivElement, MouseEvent>
-                        ) => rightClickHandler(e, x, y)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </>
-      )}
+      {showFancyGrid() &&
+        grid.map((row, y) => {
+          return (
+            <div className={style.grid} key={`key${y}`}>
+              {row.map((pipe, x) => {
+                return (
+                  <div
+                    key={`key${y}${x}`}
+                    style={{ width: cellWidth, minWidth: "30px" }}
+                  >
+                    <Cell
+                      pipe={pipe}
+                      isActive={xx === x && yy === y}
+                      onClick={() => cellClickHandler(x, y, pipe)}
+                      onRightClick={(
+                        e: React.MouseEvent<HTMLDivElement, MouseEvent>
+                      ) => rightClickHandler(e, x, y)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
     </div>
   );
 };

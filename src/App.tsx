@@ -9,13 +9,13 @@ import {
   rotatePipe,
   appendRotateMessage,
   checkPipe,
-  ShapeType,
 } from "./engine";
 import Options from "./components/options/Options";
 import Heading from "./components/header/Header";
 import History from "./components/history/History";
 import FancyGrid from "./components/fancyGrid/FancyGrid";
 import SimpleGrid from "./components/simpleGrid/SimpleGrid";
+import Slider from "./components/slider/Slider";
 
 export interface WhatRender {
   levelsBtns: boolean;
@@ -68,7 +68,7 @@ function App() {
 
   client.onmessage = (msg) => {
     const info: string = msg.data as string;
-    // console.log("info", info);
+    console.log("info", info);
     if (info.startsWith("verify: Correct")) {
       setVerifyMsg(info);
     }
@@ -126,11 +126,11 @@ function App() {
           return;
         }
         setCounter(counter + 1);
-      }, autoSolveTime * autoSolveTime * 50);
+      }, autoSolveTime*200);
     }
   }, [counter, autoSolve]);
 
-  console.log(autoSolveTime);
+
 
   const setLevel = (level: number) => {
     client.send(`new ${level}`);
@@ -173,6 +173,7 @@ function App() {
       });
     }
   };
+
   const restartGame = () => {
     setHistory("rotate");
     setCounter(0);
@@ -193,13 +194,14 @@ function App() {
       verify: false,
     });
   };
+
   const startAutoSolve = () => {
+    rotateCount.current = counter;
+
     if (currentLevel.current > 2) {
       setAutoSolveTime(0);
-    } else {
-      setAutoSolveTime(2);
     }
-    rotateCount.current = counter;
+
     setAutoSolve(true);
     setVerifyMsg("");
     setWhatRender({
@@ -210,15 +212,16 @@ function App() {
       simpleGrid: false,
     });
   };
+
   const stopAutoSolve = () => {
+    clearTimeout(timeOut.current!);
+    setAutoSolve(false);
     setWhatRender({
       ...whatRender,
       startSolveBtn: true,
       stopSolveBtn: false,
       verify: true,
     });
-    clearTimeout(timeOut.current!);
-    setAutoSolve(false);
   };
 
   const cellClickHandler = (x: number, y: number, pipe?: Pipe) => {
@@ -272,6 +275,16 @@ function App() {
               onStopAutoSolveClick={stopAutoSolve}
               onRestartClick={restartGame}
             />
+            {currentLevel.current < 3 && whatRender.fancyGrid && (
+              <Slider
+                min={0}
+                max={4}
+                value={autoSolveTime}
+                onChange={(value) => {
+                  setAutoSolveTime(value);
+                }}
+              />
+            )}
             <FancyGrid
               whatRender={whatRender}
               grid={grid}
@@ -281,10 +294,6 @@ function App() {
               level={currentLevel.current}
               cellClickHandler={cellClickHandler}
               rightClickHandler={rightClickHandler}
-              autoSolveTime={autoSolveTime}
-              onSliderChange={(value) => {
-                setAutoSolveTime(value);
-              }}
             />
             <SimpleGrid
               handleGridShow={() =>

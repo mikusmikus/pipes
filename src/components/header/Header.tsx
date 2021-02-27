@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Button from "../../common-components/button/Button";
+import Button from "../button/Button";
 import style from "./header.module.scss";
 import Rules from "./../rules/Rules";
 

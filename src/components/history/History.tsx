@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 import { WhatRender } from "../../App";
-import Button from "../../common-components/button/Button";
+import Button from "../button/Button";
 import style from "./history.module.scss";
 
 type Props = {

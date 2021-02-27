@@ -7,6 +7,7 @@ import {
   makeShapeGridFromRows,
   splitRawDataInShapeRows,
   translateFromShapeToPipe,
+  translateFromPipeToShape,
   transformShapeGridToPipeGrid,
   rotatePipe,
   appendRotateMessage,
@@ -285,6 +286,24 @@ describe("translateFromShapeToPipe function", () => {
     expect(result).toEqual(expected);
   });
 });
+
+describe("translateFromPipeToShape function", () => {
+  it("should work case ┏", () => {
+    const pipe: Pipe = {
+      top: false,
+      right: true,
+      bottom: true,
+      left: false,
+      name: "Elbow",
+      isDone: false,
+      position: 90,
+      allowedPositions: [0, 90, 180, 270],
+    };
+    const expected = "┏"
+    const result = translateFromPipeToShape(pipe);
+    expect(result).toEqual(expected);
+  });
+})
 
 describe("transformShapeGridToPipeGrid function", () => {
   it("should work corectly", () => {

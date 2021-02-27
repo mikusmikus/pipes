@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { WhatRender } from "../../App";
-import Button from "../../common-components/button/Button";
-import { Pipe, translatePipeToShape } from "../../engine";
+import Button from "../button/Button";
+import { Pipe, translateFromPipeToShape } from "../../engine";
 import Spinner from "../spinner/Spinner";
 import style from "./simpleGrid.module.scss";
 
@@ -34,17 +34,18 @@ const SimpleGrid: FC<Props> = ({
   return (
     <div className={style.simpleGrid}>
       {level > 3 && !simpleGrid && startSolveBtn && (
-        <>
-          <h1>
-            Warning, game size is very big, do you realy want to see it? it can
-            freeze your computer!!!
-            <Button color='danger' size='big' onClick={() => handleGridShow()}>
-              show grid
-            </Button>
-          </h1>
-        </>
+        <div className={style.warning}>
+          <h1>Warning!!!</h1>
+          <h3>
+            Game size is very big, do you realy want to see it? it can take some
+            time...
+          </h3>
+          <Button color='danger' size='large' onClick={() => handleGridShow()}>
+            show grid
+          </Button>
+        </div>
       )}
-      {stopSolveBtn && level>3 && <Spinner />}
+      {stopSolveBtn && level > 3 && <Spinner />}
       {simpleGrid &&
         grid.map((row, y) => {
           return (
@@ -59,7 +60,7 @@ const SimpleGrid: FC<Props> = ({
                       e: React.MouseEvent<HTMLDivElement, MouseEvent>
                     ) => rightClickHandler(e, x, y)}
                   >
-                    {translatePipeToShape(pipe)}
+                    {translateFromPipeToShape(pipe)}
                   </div>
                 );
               })}

@@ -24,3 +24,11 @@
 .isDone{
     background-color: $color-warning;
 }
+.warning{
+    text-align: center;
+    padding: 3rem 2rem;
+    h1{
+        font-size: 3rem;
+        color: $color-danger;
+    }
+}
