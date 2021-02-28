@@ -2,6 +2,7 @@
 
 
 .simpleGrid{
+    position: relative;
     max-width: 900px;
     width: 100%;
     margin: 0 auto;
@@ -9,8 +10,20 @@
     max-height: 900px;
 }
 .grid{
+    // z-index: 1;
     display: flex;
     line-height: 1;
+    font-weight: 700;
+    min-height: 1rem;
+    min-width: 1rem;
+    background-color: white;
+}
+.loading{
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 .pipe{
     cursor: pointer;

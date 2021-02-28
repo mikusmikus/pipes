@@ -56,7 +56,7 @@ const ResultsTable: FC<Props> = ({
             </thead>
             <tbody>
               {results.map(({ level, password }, index) => (
-                <tr key={level}>
+                <tr key={level} className={password && style.done}>
                   <td>{index + 1}</td>
                   <td>{password}</td>
                 </tr>

@@ -44,7 +44,7 @@ const FancyGrid: FC<Props> = ({
   };
   return (
     <div className={style.fancyGrid}>
-      {fancyGrid && level > 2 && stopSolveBtn && <Spinner />}
+      {/* {fancyGrid && level > 2 && stopSolveBtn && <Spinner />} */}
       {showFancyGrid() &&
         grid.map((row, y) => {
           return (

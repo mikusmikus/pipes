@@ -646,3 +646,8 @@ export const checkPipe = (
     }
   }
 };
+
+// check if solved pipe have open directions
+export const checkSolvedPipeSides = () => {
+
+}

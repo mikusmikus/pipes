@@ -45,8 +45,10 @@ const SimpleGrid: FC<Props> = ({
           </Button>
         </div>
       )}
-      {stopSolveBtn && level > 3 && <Spinner />}
-      {simpleGrid &&
+      <div className={style.loading}>
+        <Spinner />
+      </div>
+      {simpleGrid && level > 3 &&
         grid.map((row, y) => {
           return (
             <div className={style.grid} key={`key${y}`}>

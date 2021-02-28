@@ -1,13 +1,5 @@
 @import "../../styles/index.scss";
 
-.header {
-  position: relative;
-  padding: 30px;
-  background-color: $color-primary-dark;
-  background-image: url("../../assets/pipes.jpg");
-  background-size: cover;
-  background-position: center;
-}
 .heading {
   color: $color-primary-light;
   padding: 0 2rem;
@@ -43,8 +35,7 @@
     position: absolute;
     display: block;
     height: auto;
-    top: 100%;
+    top: 0;
     right: 0;
-    transform: translateY(-100%);
   }
 }

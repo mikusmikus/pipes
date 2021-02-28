@@ -17,6 +17,7 @@ import FancyGrid from "./components/fancyGrid/FancyGrid";
 import SimpleGrid from "./components/simpleGrid/SimpleGrid";
 import Slider from "./components/slider/Slider";
 import ResultsTable from "./components/resultsTable/ResultsTable";
+import Spinner from "./components/spinner/Spinner";
 
 export interface WhatRender {
   levelsBtns: boolean;
@@ -88,30 +89,7 @@ function App() {
 
   useEffect(() => {
     if (grid.length && autoSolve) {
-      let loopCountLeft = totalPipes.current;
-      let keepLooping = true;
-      do {
-        if (counter) {
-          xx.current += 1;
-        }
-        if (xx.current >= grid[0].length) {
-          xx.current = 0;
-          yy.current += 1;
-        }
-        if (yy.current >= grid.length) {
-          yy.current = 0;
-          xx.current = 0;
-        }
-
-        if (!grid[yy.current][xx.current].isDone) {
-          keepLooping = false;
-        }
-
-        loopCountLeft -= 1;
-        if (loopCountLeft < 0) {
-          keepLooping = false;
-        }
-      } while (keepLooping);
+      findNextCoordinates(counter);
 
       timeOut.current = setTimeout(() => {
         const { rotateMessage, pipesLeft } = checkPipe(
@@ -136,6 +114,64 @@ function App() {
       }, autoSolveTime * 200);
     }
   }, [counter, autoSolve]);
+
+  const findNextCoordinates = (count: number) => {
+    let loopCountLeft = totalPipes.current;
+    let keepLooping = true;
+    do {
+      if (count) {
+        xx.current += 1;
+      }
+      if (xx.current >= grid[0].length) {
+        xx.current = 0;
+        yy.current += 1;
+      }
+      if (yy.current >= grid.length) {
+        yy.current = 0;
+        xx.current = 0;
+      }
+
+      if (!grid[yy.current][xx.current].isDone) {
+        keepLooping = false;
+      }
+
+      loopCountLeft -= 1;
+      if (loopCountLeft < 0) {
+        keepLooping = false;
+      }
+    } while (keepLooping);
+  };
+
+  const fastAutoSolve = () => {
+    console.log("started");
+
+    let countCounter = counter;
+    console.log(countCounter);
+    
+    let msg = "rotate";
+
+    while (countCounter - rotateCount.current < pipesToSolve.current) {
+      findNextCoordinates(countCounter);
+      const { rotateMessage, pipesLeft } = checkPipe(
+        xx.current,
+        yy.current,
+        grid,
+        msg,
+        pipesToSolve.current
+      );
+
+      if (rotateMessage.length !== msg.length) {
+        msg = rotateMessage;
+        rotateCount.current = countCounter;
+        pipesToSolve.current = pipesLeft;
+      }
+      countCounter += 1;
+    }
+
+    stopAutoSolve();
+    setCounter(countCounter);
+    setVerifyMsg(msg);
+  };
 
   const setLevel = (level: number) => {
     client.send(`new ${level}`);
@@ -173,10 +209,10 @@ function App() {
         startGameBtn: false,
         restartBtn: true,
         startSolveBtn: true,
-        // simpleGrid: true,
         verify: true,
       });
     }
+
   };
 
   const restartGameBtn = () => {
@@ -202,20 +238,39 @@ function App() {
 
   const startAutoSolve = () => {
     rotateCount.current = counter;
-
-    if (currentLevel.current > 2) {
-      setAutoSolveTime(0);
+    setVerifyResponde("");
+    if (currentLevel.current < 2) {
+      setWhatRender({
+        ...whatRender,
+        startSolveBtn: false,
+        stopSolveBtn: true,
+        verify: false,
+        simpleGrid: false,
+      });
+      setAutoSolve(true);
+      return;
     }
 
-    setAutoSolve(true);
-    setVerifyResponde("");
     setWhatRender({
       ...whatRender,
       startSolveBtn: false,
       stopSolveBtn: true,
       verify: false,
       simpleGrid: false,
+      fancyGrid: false,
     });
+
+    setTimeout(() => {
+      fastAutoSolve()
+      setWhatRender({
+        ...whatRender,
+        startSolveBtn: true,
+        stopSolveBtn: false,
+        verify: true,
+      });
+    }, 0);
+
+    return;
   };
 
   const stopAutoSolve = () => {
@@ -296,6 +351,7 @@ function App() {
                 }}
               />
             )}
+            {currentLevel.current > 2 && whatRender.stopSolveBtn && <Spinner />}
             <FancyGrid
               whatRender={whatRender}
               grid={grid}

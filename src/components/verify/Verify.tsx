@@ -29,7 +29,7 @@ const Verify: FC<Props> = ({
     }
   });
   const showVerifyMsg = () => {
-    if (stopSolveBtn && level<4) 
+    if (stopSolveBtn && level<3) 
     return true
     if (!stopSolveBtn){
       return true
