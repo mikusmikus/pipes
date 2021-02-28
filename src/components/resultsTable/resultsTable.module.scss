@@ -25,3 +25,16 @@
     background-color: $color-warning;
   }
 }
+@media only screen and (max-width: 48rem) {
+  .results {
+    margin-bottom: 0;
+    padding: 0rem;
+    font-size: 0.8rem;
+  }
+  table{
+    padding: 0.2em 0.2em 0em 1em
+  }
+  th, td{
+    padding: 0.1em 0.3em;
+  }
+}

@@ -259,7 +259,7 @@ function App() {
         spinner: false,
         verify: true,
       });
-    }, 0);
+    }, 500);
 
     return;
   };

@@ -32,7 +32,7 @@ const Options: FC<Props> = ({
   return (
     <div className={`${style.options} row middle-xs`}>
       {levelsBtns && (
-        <div className='col-xs-9 center-xs'>
+        <div className='col-sm-9 col-xs-12 center-xs'>
           <h2>Select difficulty Level</h2>
           {levels.map((level, index) => (
             <Button
