@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { WhatRender } from "../../App";
 import Button from "../button/Button";
 import { Pipe, translateFromPipeToShape } from "../../engine";
-import Spinner from "../spinner/Spinner";
 import style from "./simpleGrid.module.scss";
 
 type Props = {
@@ -25,7 +24,7 @@ const SimpleGrid: FC<Props> = ({
   rightClickHandler,
   handleGridShow,
 }) => {
-  const { simpleGrid, startSolveBtn, stopSolveBtn } = whatRender;
+  const { simpleGrid, startSolveBtn, spinner } = whatRender;
 
   const handleCellClick = (x: number, y: number) => {
     cellClickHandler(x, y);
@@ -33,7 +32,7 @@ const SimpleGrid: FC<Props> = ({
 
   return (
     <div className={style.simpleGrid}>
-      {level > 3 && !simpleGrid && startSolveBtn && (
+      {level > 3 &&  startSolveBtn && !spinner && !simpleGrid &&(
         <div className={style.warning}>
           <h1>Warning!!!</h1>
           <h3>
@@ -45,9 +44,6 @@ const SimpleGrid: FC<Props> = ({
           </Button>
         </div>
       )}
-      <div className={style.loading}>
-        <Spinner />
-      </div>
       {simpleGrid && level > 3 &&
         grid.map((row, y) => {
           return (

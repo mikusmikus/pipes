@@ -2,8 +2,6 @@ import React, { FC } from "react";
 import { WhatRender } from "../../App";
 import { Pipe } from "../../engine";
 import { Cell } from "../cell/Cell";
-import Slider from "../slider/Slider";
-import Spinner from "../spinner/Spinner";
 import style from "./fancyGrid.module.scss";
 
 type Props = {
@@ -44,7 +42,6 @@ const FancyGrid: FC<Props> = ({
   };
   return (
     <div className={style.fancyGrid}>
-      {/* {fancyGrid && level > 2 && stopSolveBtn && <Spinner />} */}
       {showFancyGrid() &&
         grid.map((row, y) => {
           return (

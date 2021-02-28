@@ -647,6 +647,45 @@ export const checkPipe = (
   }
 };
 
+
+export const findNextCoordinates = (
+  count: number,
+  totalPipes: number,
+  xx: number,
+  yy: number,
+  grid: Pipe[][]
+) => {
+  let loopCountLeft = totalPipes;
+  let keepLooping = true;
+  let x = xx;
+  let y = yy;
+
+  do {
+    if (count) {
+      x += 1;
+    }
+    if (x >= grid[0].length) {
+      x = 0;
+      y += 1;
+    }
+    if (y >= grid.length) {
+      y = 0;
+      x = 0;
+    }
+
+    if (!grid[y][x].isDone) {
+      keepLooping = false;
+    }
+
+    loopCountLeft -= 1;
+    if (loopCountLeft < 0) {
+      keepLooping = false;
+    }
+  } while (keepLooping);
+  return { x, y };
+};
+
+
 // check if solved pipe have open directions
 export const checkSolvedPipeSides = () => {
 

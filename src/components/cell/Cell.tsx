@@ -23,6 +23,7 @@ export const Cell: FC<Props> = ({
   if (isDone) backgroundColor = "#fca311";
   else if (isActive) backgroundColor = "#ec404f";
 
+  
   return (
     <div
       className={style.wrapper}

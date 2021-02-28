@@ -9,6 +9,7 @@ import {
   rotatePipe,
   appendRotateMessage,
   checkPipe,
+  findNextCoordinates,
 } from "./engine";
 import Options from "./components/options/Options";
 import Heading from "./components/header/Header";
@@ -27,8 +28,8 @@ export interface WhatRender {
   stopSolveBtn: boolean;
   simpleGrid: boolean;
   restartBtn: boolean;
+  spinner: boolean;
   verify: boolean;
-  info: boolean;
 }
 const client = new w3cwebsocket("wss://hometask.eg1236.com/game-pipes/");
 
@@ -43,9 +44,9 @@ let cellWidth = "";
 function App() {
   const [grid, setGrid] = useState<Pipe[][]>([]);
   const [verifyMsg, setVerifyMsg] = useState("rotate");
+  const [verifyResponde, setVerifyResponde] = useState("");
   const [counter, setCounter] = useState(0);
   const [autoSolve, setAutoSolve] = useState(false);
-  const [verifyResponde, setVerifyResponde] = useState("");
   const [autoSolveTime, setAutoSolveTime] = useState(2);
   const [whatRender, setWhatRender] = useState({
     levelsBtns: true,
@@ -55,8 +56,8 @@ function App() {
     startSolveBtn: false,
     stopSolveBtn: false,
     restartBtn: false,
+    spinner: false,
     verify: false,
-    info: true,
   });
 
   const timeOut = useRef<NodeJS.Timeout>();
@@ -83,13 +84,22 @@ function App() {
   };
 
   // string to bytes
-  const byteCount = (s: string) => {
-    return encodeURI(s).split(/%..|./).length - 1;
-  };
+  // const byteCount = (s: string) => {
+  //   return encodeURI(s).split(/%..|./).length - 1;
+  // };
 
   useEffect(() => {
     if (grid.length && autoSolve) {
-      findNextCoordinates(counter);
+      const { x, y } = findNextCoordinates(
+        counter,
+        totalPipes.current,
+        xx.current,
+        yy.current,
+        grid
+      );
+
+      xx.current = x;
+      yy.current = y;
 
       timeOut.current = setTimeout(() => {
         const { rotateMessage, pipesLeft } = checkPipe(
@@ -115,43 +125,22 @@ function App() {
     }
   }, [counter, autoSolve]);
 
-  const findNextCoordinates = (count: number) => {
-    let loopCountLeft = totalPipes.current;
-    let keepLooping = true;
-    do {
-      if (count) {
-        xx.current += 1;
-      }
-      if (xx.current >= grid[0].length) {
-        xx.current = 0;
-        yy.current += 1;
-      }
-      if (yy.current >= grid.length) {
-        yy.current = 0;
-        xx.current = 0;
-      }
-
-      if (!grid[yy.current][xx.current].isDone) {
-        keepLooping = false;
-      }
-
-      loopCountLeft -= 1;
-      if (loopCountLeft < 0) {
-        keepLooping = false;
-      }
-    } while (keepLooping);
-  };
-
   const fastAutoSolve = () => {
-    console.log("started");
-
     let countCounter = counter;
-    console.log(countCounter);
-    
-    let msg = "rotate";
+    let msg = verifyMsg;
 
     while (countCounter - rotateCount.current < pipesToSolve.current) {
-      findNextCoordinates(countCounter);
+      const { x, y } = findNextCoordinates(
+        countCounter,
+        totalPipes.current,
+        xx.current,
+        yy.current,
+        grid
+      );
+
+      xx.current = x;
+      yy.current = y;
+
       const { rotateMessage, pipesLeft } = checkPipe(
         xx.current,
         yy.current,
@@ -212,7 +201,6 @@ function App() {
         verify: true,
       });
     }
-
   };
 
   const restartGameBtn = () => {
@@ -239,13 +227,14 @@ function App() {
   const startAutoSolve = () => {
     rotateCount.current = counter;
     setVerifyResponde("");
-    if (currentLevel.current < 2) {
+    if (currentLevel.current < 3) {
       setWhatRender({
         ...whatRender,
         startSolveBtn: false,
         stopSolveBtn: true,
         verify: false,
         simpleGrid: false,
+        restartBtn: false,
       });
       setAutoSolve(true);
       return;
@@ -254,18 +243,20 @@ function App() {
     setWhatRender({
       ...whatRender,
       startSolveBtn: false,
-      stopSolveBtn: true,
+      restartBtn: false,
       verify: false,
       simpleGrid: false,
       fancyGrid: false,
+      spinner: true,
     });
 
     setTimeout(() => {
-      fastAutoSolve()
+      fastAutoSolve();
       setWhatRender({
         ...whatRender,
         startSolveBtn: true,
         stopSolveBtn: false,
+        spinner: false,
         verify: true,
       });
     }, 0);
@@ -280,7 +271,10 @@ function App() {
       ...whatRender,
       startSolveBtn: true,
       stopSolveBtn: false,
+      restartBtn: true,
       verify: true,
+      simpleGrid: true,
+      fancyGrid: true,
     });
   };
 
@@ -321,11 +315,17 @@ function App() {
   };
 
   return (
-    <div>
-      <Heading />
+    <>
+      <div className='container container-fluid'>
+        <div className='row'>
+          <div className='col-xs-12'>
+            <Heading />
+          </div>
+        </div>
+      </div>
       <div className='container container-fluid main-content'>
         <div className='row'>
-          <div className='col-sm-9 col-xs-12'>
+          <div className='col-xs-12'>
             <Options
               whatRender={whatRender}
               levels={levels}
@@ -335,6 +335,10 @@ function App() {
               onStopAutoSolveClick={stopAutoSolve}
               onRestartClick={restartGameBtn}
             />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-9 col-xs-12'>
             <ResultsTable
               verifyResponde={verifyResponde}
               currentLevel={currentLevel.current}
@@ -351,7 +355,7 @@ function App() {
                 }}
               />
             )}
-            {currentLevel.current > 2 && whatRender.stopSolveBtn && <Spinner />}
+            {whatRender.spinner && <Spinner>Loading...</Spinner>}
             <FancyGrid
               whatRender={whatRender}
               grid={grid}
@@ -388,7 +392,7 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
