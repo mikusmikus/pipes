@@ -1,7 +1,5 @@
 @import "../../styles/index.scss";
-.sliderWrapper{
-  
-}
+
 .slider {
   margin-top: 60px;
   position: relative;
@@ -10,15 +8,6 @@
   margin: 0 auto;
 }
 
-.label {
-  position: absolute;
-  // transform-origin: center center;
-  right: 0;
-  top: -30px;
-  line-height: 30px;
-  border: 1px solid black;
-  color: rgb(0, 0, 0);
-}
 .range {
   position: relative;
   -webkit-appearance: none;

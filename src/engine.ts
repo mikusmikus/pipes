@@ -535,7 +535,6 @@ export const solvePipe = (
   );
   for (let i = 0; i < count; i++) {
     grid[y][x] = rotatePipe(grid[y][x]);
-    // message @ end
     output = appendRotateMessage(output, x, y);
   }
   grid[y][x].isDone = true;
@@ -654,7 +653,7 @@ export const findNextCoordinates = (
   xx: number,
   yy: number,
   grid: Pipe[][]
-) => {
+):{x: number, y: number} => {
   let loopCountLeft = totalPipes;
   let keepLooping = true;
   let x = xx;

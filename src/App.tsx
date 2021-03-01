@@ -128,8 +128,8 @@ function App() {
   const fastAutoSolve = () => {
     let countCounter = counter;
     let msg = verifyMsg;
-
-    while (countCounter - rotateCount.current < pipesToSolve.current) {
+    
+    while (countCounter - rotateCount.current <= pipesToSolve.current) {
       const { x, y } = findNextCoordinates(
         countCounter,
         totalPipes.current,
@@ -149,14 +149,13 @@ function App() {
         pipesToSolve.current
       );
 
+      pipesToSolve.current = pipesLeft;
       if (rotateMessage.length !== msg.length) {
         msg = rotateMessage;
         rotateCount.current = countCounter;
-        pipesToSolve.current = pipesLeft;
       }
       countCounter += 1;
     }
-
     stopAutoSolve();
     setCounter(countCounter);
     setVerifyMsg(msg);
@@ -246,7 +245,7 @@ function App() {
       restartBtn: false,
       verify: false,
       simpleGrid: false,
-      fancyGrid: false,
+      fancyGrid: currentLevel.current < 3,
       spinner: true,
     });
 
@@ -259,12 +258,14 @@ function App() {
         spinner: false,
         verify: true,
       });
-    }, 500);
+    }, 300);
 
     return;
   };
 
   const stopAutoSolve = () => {
+    console.log('stopped');
+    
     clearTimeout(timeOut.current!);
     setAutoSolve(false);
     setWhatRender({
@@ -273,12 +274,11 @@ function App() {
       stopSolveBtn: false,
       restartBtn: true,
       verify: true,
-      simpleGrid: true,
-      fancyGrid: true,
+      fancyGrid: currentLevel.current < 4,
     });
   };
 
-  const cellClickHandler = (x: number, y: number, pipe?: Pipe) => {
+  const cellClickHandler = (x: number, y: number) => {
     if (grid[y][x].isDone) {
       alert("you need to unlock pipe to rotate it");
       return;

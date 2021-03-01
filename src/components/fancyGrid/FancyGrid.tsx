@@ -11,7 +11,7 @@ type Props = {
   yy: number;
   level: number;
   whatRender: WhatRender;
-  cellClickHandler: (x: number, y: number, pipe: Pipe) => void;
+  cellClickHandler: (x: number, y: number) => void;
   rightClickHandler: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     x: number,
@@ -55,7 +55,7 @@ const FancyGrid: FC<Props> = ({
                     <Cell
                       pipe={pipe}
                       isActive={xx === x && yy === y}
-                      onClick={() => cellClickHandler(x, y, pipe)}
+                      onClick={() => cellClickHandler(x, y)}
                       onRightClick={(
                         e: React.MouseEvent<HTMLDivElement, MouseEvent>
                       ) => rightClickHandler(e, x, y)}
