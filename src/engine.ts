@@ -88,17 +88,20 @@ export const translateFromShapeToPipe = (
     case "┛": {
       return initNewPipe("Elbow", true, false, false, true, 270);
     }
-    case "╸": {
-      return initNewPipe("End", false, false, false, true, 270);
-    }
     case "╹": {
       return initNewPipe("End", true, false, false, false, 0);
+    }
+    case "╺": {
+      return initNewPipe("End", false, true, false, false, 90);
     }
     case "╻": {
       return initNewPipe("End", false, false, true, false, 180);
     }
-    case "╺": {
-      return initNewPipe("End", false, true, false, false, 90);
+    case "╸": {
+      return initNewPipe("End", false, false, false, true, 270);
+    }
+    case "┻": {
+      return initNewPipe("Tee", true, true, false, true, 0);
     }
     case "┣": {
       return initNewPipe("Tee", true, true, true, false, 90);
@@ -106,17 +109,14 @@ export const translateFromShapeToPipe = (
     case "┳": {
       return initNewPipe("Tee", false, true, true, true, 180);
     }
-    case "┻": {
-      return initNewPipe("Tee", true, true, false, true, 0);
-    }
     case "┫": {
       return initNewPipe("Tee", true, false, true, true, 270);
     }
-    case "━": {
-      return initNewPipe("Line", false, true, false, true, 90);
-    }
     case "┃": {
       return initNewPipe("Line", true, false, true, false, 0);
+    }
+    case "━": {
+      return initNewPipe("Line", false, true, false, true, 90);
     }
     case "╋": {
       return initNewPipe("Cross", true, true, true, true, 0);
@@ -158,6 +158,8 @@ export const translateFromPipeToShape = (pipe: Pipe): ShapeType => {
       return "╺";
     case JSON.stringify([true, false, false, false]):
       return "╹";
+    case JSON.stringify([true, true, true, true]):
+      return "╋";
     default:
       return "╋";
   }
@@ -229,6 +231,7 @@ export const mustBeNotConnected = (
 
   let output = true;
   const positionNow = pipe.position;
+  
   pipe.allowedPositions.forEach((posAllowed) => {
     const count = calculateRotationCount(positionNow, posAllowed);
     let tmpPipe = { ...pipe };
@@ -258,6 +261,7 @@ export const mustBeConnected = (
     let tmpPipe = { ...pipe };
     for (let i = 0; i < count; i++) {
       tmpPipe = rotatePipe(tmpPipe);
+      
     }
     if (!tmpPipe[direction]) output = false;
   });
@@ -561,7 +565,7 @@ const isDoneAndConnectedSpecificDirection = (
   return false;
 };
 
-const checkLine = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number):Output => {
+export const checkLine = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number):Output => {
   let output = rotateMsg;
   grid[y][x].allowedPositions = checkLeft_Line(x, y, grid);
   grid[y][x].allowedPositions = checkRight_Line(x, y, grid);
@@ -574,7 +578,7 @@ const checkLine = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipe
   return outputObj
 };
 
-const checkTee = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number):Output => {
+export const checkTee = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number):Output => {
   let output = rotateMsg;
   grid[y][x].allowedPositions = checkLeft_Tee(x, y, grid);
   grid[y][x].allowedPositions = checkRight_Tee(x, y, grid);
@@ -587,7 +591,7 @@ const checkTee = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipes
   return outputObj
 };
 
-const checkEnd = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number) => {
+export const checkEnd = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number) => {
   let output = rotateMsg;
   grid[y][x].allowedPositions = checkLeft_End(x, y, grid);
   grid[y][x].allowedPositions = checkRight_End(x, y, grid);
@@ -681,11 +685,7 @@ export const findNextCoordinates = (
       keepLooping = false;
     }
   } while (keepLooping);
+
+  
   return { x, y };
 };
-
-
-// check if solved pipe have open directions
-export const checkSolvedPipeSides = () => {
-
-}

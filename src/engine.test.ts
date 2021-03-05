@@ -19,6 +19,17 @@ import {
   checkBottom_Line,
   checkTop_Line,
   checkRight_Line,
+  checkLeft_Tee,
+  checkRight_Tee,
+  checkTop_Tee,
+  checkBottom_Tee,
+  solvePipe,
+  checkLine,
+  checkTee,
+  checkEnd,
+  findNextCoordinates,
+  checkLeft_End,
+  checkLeft_Elbow,
 } from "./engine";
 
 const SAMPLE =
@@ -27,6 +38,7 @@ const SAMPLE =
 const step1 = splitRawDataInShapeRows(SAMPLE);
 const step2 = makeShapeGridFromRows(step1);
 const SAMPLE_PIPES = transformShapeGridToPipeGrid(step2);
+
 
 describe("splitRawDataInRows function", () => {
   it("should work properly", () => {
@@ -45,7 +57,7 @@ describe("splitRawDataInRows function", () => {
   });
 });
 
-describe("makeGridFromRows function", () => {
+describe("makeShapeGridFromRows function", () => {
   it("should work properly", () => {
     const ROWS = ["╸╺┏╸", "━┏┣┏"];
     const expected = [
@@ -58,7 +70,7 @@ describe("makeGridFromRows function", () => {
 });
 
 describe("initNewPipe function", () => {
-  it("should work properly", () => {
+  it("should work properly case 1", () => {
     const expected: Pipe = {
       top: false,
       right: true,
@@ -70,6 +82,20 @@ describe("initNewPipe function", () => {
       allowedPositions: [0, 90, 180, 270],
     };
     const result = initNewPipe("Elbow", false, true, true, false, 90);
+    expect(result).toEqual(expected);
+  });
+  it("should work properly case 2", () => {
+    const expected: Pipe = {
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      name: "Cross",
+      isDone: true,
+      position: 0,
+      allowedPositions: [0],
+    };
+    const result = initNewPipe("Cross", true, true, true, true, 0);
     expect(result).toEqual(expected);
   });
 });
@@ -303,6 +329,36 @@ describe("translateFromPipeToShape function", () => {
     const result = translateFromPipeToShape(pipe);
     expect(result).toEqual(expected);
   });
+  it("should work case ╺", () => {
+    const pipe: Pipe = {
+      top: false,
+      right: true,
+      bottom: false,
+      left: false,
+      name: "End",
+      isDone: true,
+      position: 90,
+      allowedPositions: [90],
+    };
+    const expected = "╺"
+    const result = translateFromPipeToShape(pipe);
+    expect(result).toEqual(expected);
+  });
+  it("should work case ╋", () => {
+    const pipe: Pipe = {
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      name: "Cross",
+      isDone: true,
+      position: 90,
+      allowedPositions: [0],
+    };
+    const expected = "╋"
+    const result = translateFromPipeToShape(pipe);
+    expect(result).toEqual(expected);
+  });
 })
 
 describe("transformShapeGridToPipeGrid function", () => {
@@ -404,7 +460,7 @@ describe("transformShapeGridToPipeGrid function", () => {
 });
 
 describe("rotatePipe function", () => {
-  it("should work properly", () => {
+  it("should work properly case", () => {
     const input: Pipe = {
       top: false,
       right: true,
@@ -459,7 +515,7 @@ describe("calculateRotationCount function", () => {
 });
 
 describe("mustBeNotConnected function", () => {
-  it("should work case 1", () => {
+  it("should work case 1 '┏'", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[1][1].allowedPositions = [90, 180];
     const expected = true;
@@ -592,11 +648,12 @@ describe("spliceOutPositions function", () => {
   });
   it("should work when passed all positions", () => {
     const expected: Position[] = [];
-    const result = spliceOutPositions([0, 90], 90, 0);
+    const result = spliceOutPositions([0, 90], 0, 90);
     expect(result).toEqual(expected);
   });
 });
 
+// --------------- CHECK LINE SHAPE -------------
 describe("checkLeft_Line function", () => {
   it("should work if there is no pipe on left", () => {
     const expected = [0];
@@ -616,6 +673,7 @@ describe("checkRight_Line function", () => {
     const input = [...SAMPLE_PIPES];
     input[0][7].top = true;
     input[0][7].name = "Line";
+    
     const result = checkRight_Line(7, 0, input);
     expect(result).toEqual(expected);
   });
@@ -651,3 +709,219 @@ describe("checkBottom_Line function", () => {
     expect(result).toEqual(expected);
   });
 });
+
+// --------------- CHECK TEE SHAPE -------------
+describe("checkLeft_Tee function", () => {
+  it("should work if there is no pipe on left", () => {
+    const expected = [90];
+    const result = checkLeft_Tee(0, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on left", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkLeft_Tee(1, 1, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkright_Tee function", () => {
+  it("should work if there is no pipe on right", () => {
+    const expected = [270];
+    const result = checkRight_Tee(7, 6, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on right", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkRight_Tee(3, 1, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkTop_Tee function", () => {
+  it("should work if there is no pipe on top", () => {
+    const expected = [180];
+    const result = checkTop_Tee(2, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on top", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkTop_Tee(3, 1, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkBottom_Tee function", () => {
+  it("should work if there is no pipe on bottom", () => {
+    const expected = [0];
+    const result = checkBottom_Tee(2, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on bottom", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkBottom_Tee(3, 1, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+// --------------- CHECK END SHAPE -------------
+describe("checkLeft_End function", () => {
+  it("should work if there is no pipe on left", () => {
+    const expected = [0, 90, 180];
+    const result = checkLeft_End(0, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is done pipe on left", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[0][2].isDone=true;
+    output[0][2].allowedPositions=[90];
+
+    const expected = [270];
+    const result = checkLeft_End(3, 0, output);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on left", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkLeft_End(3, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+// --------------- CHECK ELBOW SHAPE -------------
+describe("checkLeft_Elbow function", () => {
+  it("should work if there is no pipe on left", () => {
+    const expected = [0, 90];
+    const result = checkLeft_Elbow(0, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is done pipe on left", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[0][1].isDone=true;
+    output[0][1].allowedPositions=[90];
+    
+    const expected = [180, 270];
+    const result = checkLeft_Elbow(2, 0, output);
+    expect(result).toEqual(expected);
+  });
+  it("should work if there is not done pipe on left", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkLeft_Elbow(3, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+
+
+
+describe("solve Pipe function", ()=> {
+  it('return new rotate message and new pipesLeft count (case 1 - rotate 1 time)', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+    input[1][5].allowedPositions=[90]
+    
+    const expected = {pipesLeft: 63, rotateMessage: "rotate 5 1"};
+    const result = solvePipe(5, 1, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+  it('solved 2 pipes (each rotate at least 1 time)', () => {
+
+    const input = cloneDeep(SAMPLE_PIPES);
+    input[3][3].allowedPositions=[90]
+    input[1][5].allowedPositions=[180]
+
+    const firstResult = solvePipe(5, 1, input, 'rotate', 64)
+    const finalResult = solvePipe(3, 3, input, firstResult.rotateMessage, firstResult.pipesLeft)
+    const expected = {pipesLeft: 62, rotateMessage: "rotate 5 1\n5 1\n3 3\n3 3"};
+
+    expect(finalResult).toEqual(expected);
+  })
+})
+
+describe('checkLine function', () => {
+  it ('should rotate "line" and recieve new rotate msg un pipes left count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 63, rotateMessage: "rotate 0 1\n0 1\n0 1"};
+    const result = checkLine(0, 1, input, 'rotate', 64)
+    
+    expect(result).toEqual(expected);
+  })
+  it ('should not rotate "line" and receive same msg and count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 64, rotateMessage: "rotate"};
+    const result = checkLine(6, 3, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+})
+
+describe('checkTee function', () => {
+  it ('should rotate "tee" and recieve new rotate msg un pipes left count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 63, rotateMessage: "rotate 6 0"};
+    const result = checkTee(6, 0, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+  it ('should not rotate "tee" and receive same msg and count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 64, rotateMessage: "rotate"};
+    const result = checkTee(4, 4, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+})
+
+describe('checkEnd function', () => {
+  it ('should rotate "end" and recieve new rotate msg un pipes left count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 63, rotateMessage: "rotate 0 0\n0 0\n0 0"};
+    const result = checkEnd(0, 0, input, 'rotate', 64);
+
+    expect(result).toEqual(expected);
+  })
+  it ('should not rotate "end" and receive same msg and count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 64, rotateMessage: "rotate"};
+    const result = checkTee(3, 3, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+})
+
+describe('checkElbow function', () => {
+  it ('should rotate "elbow" and recieve new rotate msg un pipes left count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 63, rotateMessage: "rotate 2 0"};
+    const result = checkEnd(2, 0, input, 'rotate', 64);
+
+    expect(result).toEqual(expected);
+  })
+  it ('should not rotate "elbow" and receive same msg and count', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+
+    const expected = {pipesLeft: 64, rotateMessage: "rotate"};
+    const result = checkTee(3, 3, input, 'rotate', 64)
+
+    expect(result).toEqual(expected);
+  })
+})
+
+describe('findNextCoordinates function', () => {
+  it('should find first not solved pipe and return pipe coordinates', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+  
+    input[0][0].isDone=true;
+    input[0][1].isDone=true;
+    input[0][2].isDone=true;
+
+    const expected = {x:3, y:0}
+    
+    const result = findNextCoordinates(64, 64, 0, 0, input);
+    expect(result).toEqual(expected);
+  });
+})
