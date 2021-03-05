@@ -18,8 +18,8 @@ npm run test
 ✔️ - TypeScript
 ✔️ - SCSS
 
-#### solved level passwords
-  - 1. JustWarmingUp
-  - 2. DefinitelyWarm
-  - 3. GettingTooHot
-  - 4. GettingTheHangOfIt
+#### solved  passwords
+  - level-1 "JustWarmingUp" 
+  - level-2 "DefinitelyWarm"
+  - level-3 "GettingTooHot"
+  - level-4 "GettingTheHangOfIt"
