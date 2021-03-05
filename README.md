@@ -16,7 +16,6 @@ npm run test
 ### Used tools
 ✔️ - React
 ✔️ - TypeScript
-✔️ - SCSS
 
 #### solved  passwords
   - level-1 "JustWarmingUp" 
