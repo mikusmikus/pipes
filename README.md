@@ -1,5 +1,5 @@
 # Pipes game Evolutin gaming task!
-https://mikusmikus.github.io/pipes/
+
 
 
 ## To Start Project
