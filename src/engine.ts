@@ -548,23 +548,6 @@ export const solvePipe = (
   return outputObj
 };
 
-
-const isDoneAndConnectedSpecificDirection = (
-  x: number,
-  y: number,
-  direction: Direction,
-  grid: Pipe[][]
-) => {
-  // If passed not legit coordinates
-  if (x < 0 || y < 0 || x >= grid[0].length || y >= grid.length) return false;
-  // If pipe is not done
-  if (!grid[y][x].isDone) return false;
-  // if pipe is connected given direction
-  if (grid[y][x][direction]) return true;
-  // else false
-  return false;
-};
-
 export const checkLine = (x: number, y: number, grid: Pipe[][], rotateMsg: string, pipesToSolve:number):Output => {
   let output = rotateMsg;
   grid[y][x].allowedPositions = checkLeft_Line(x, y, grid);
