@@ -30,6 +30,12 @@ import {
   findNextCoordinates,
   checkLeft_End,
   checkLeft_Elbow,
+  checkRight_End,
+  checkTop_End,
+  checkBottom_End,
+  checkRight_Elbow,
+  checkTop_Elbow,
+  checkBottom_Elbow,
 } from "./engine";
 
 const SAMPLE =
@@ -41,6 +47,7 @@ const SAMPLE_PIPES = transformShapeGridToPipeGrid(step2);
 
 
 describe("splitRawDataInRows function", () => {
+
   it("should work properly", () => {
     const result = splitRawDataInShapeRows(SAMPLE);
     const expected = [
@@ -58,6 +65,7 @@ describe("splitRawDataInRows function", () => {
 });
 
 describe("makeShapeGridFromRows function", () => {
+
   it("should work properly", () => {
     const ROWS = ["╸╺┏╸", "━┏┣┏"];
     const expected = [
@@ -70,6 +78,7 @@ describe("makeShapeGridFromRows function", () => {
 });
 
 describe("initNewPipe function", () => {
+
   it("should work properly case 1", () => {
     const expected: Pipe = {
       top: false,
@@ -84,6 +93,7 @@ describe("initNewPipe function", () => {
     const result = initNewPipe("Elbow", false, true, true, false, 90);
     expect(result).toEqual(expected);
   });
+
   it("should work properly case 2", () => {
     const expected: Pipe = {
       top: true,
@@ -101,6 +111,7 @@ describe("initNewPipe function", () => {
 });
 
 describe("translateFromShapeToPipe function", () => {
+
   it("should work case ┏", () => {
     const expected: Pipe = {
       top: false,
@@ -115,6 +126,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┏");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┓", () => {
     const expected: Pipe = {
       top: false,
@@ -129,6 +141,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┓");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┗", () => {
     const expected: Pipe = {
       top: true,
@@ -143,6 +156,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┗");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┛", () => {
     const expected: Pipe = {
       top: true,
@@ -157,6 +171,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┛");
     expect(result).toEqual(expected);
   });
+
   it("should work case |╸|", () => {
     const expected: Pipe = {
       top: false,
@@ -171,6 +186,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("╸");
     expect(result).toEqual(expected);
   });
+
   it("should work case |╺|", () => {
     const expected: Pipe = {
       top: false,
@@ -185,6 +201,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("╺");
     expect(result).toEqual(expected);
   });
+
   it("should work case ╹", () => {
     const expected: Pipe = {
       top: true,
@@ -199,6 +216,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("╹");
     expect(result).toEqual(expected);
   });
+
   it("should work case ╻", () => {
     const expected: Pipe = {
       top: false,
@@ -213,6 +231,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("╻");
     expect(result).toEqual(expected);
   });
+  
   it("should work case ┣", () => {
     const expected: Pipe = {
       top: true,
@@ -227,6 +246,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┣");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┳", () => {
     const expected: Pipe = {
       top: false,
@@ -241,6 +261,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┳");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┻", () => {
     const expected: Pipe = {
       top: true,
@@ -255,6 +276,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┻");
     expect(result).toEqual(expected);
   });
+
   it("should work case ┫", () => {
     const expected: Pipe = {
       top: true,
@@ -269,6 +291,7 @@ describe("translateFromShapeToPipe function", () => {
     const result = translateFromShapeToPipe("┫");
     expect(result).toEqual(expected);
   });
+
   it("should work case |━|", () => {
     const expected: Pipe = {
       top: false,
@@ -284,6 +307,7 @@ describe("translateFromShapeToPipe function", () => {
     expect(result).toEqual(expected);
   });
   it("should work case ┃", () => {
+    
     const expected: Pipe = {
       top: true,
       right: false,
@@ -298,6 +322,7 @@ describe("translateFromShapeToPipe function", () => {
     expect(result).toEqual(expected);
   });
   it("should work case ╋", () => {
+
     const expected: Pipe = {
       top: true,
       right: true,
@@ -314,6 +339,7 @@ describe("translateFromShapeToPipe function", () => {
 });
 
 describe("translateFromPipeToShape function", () => {
+
   it("should work case ┏", () => {
     const pipe: Pipe = {
       top: false,
@@ -329,6 +355,7 @@ describe("translateFromPipeToShape function", () => {
     const result = translateFromPipeToShape(pipe);
     expect(result).toEqual(expected);
   });
+
   it("should work case ╺", () => {
     const pipe: Pipe = {
       top: false,
@@ -344,6 +371,7 @@ describe("translateFromPipeToShape function", () => {
     const result = translateFromPipeToShape(pipe);
     expect(result).toEqual(expected);
   });
+
   it("should work case ╋", () => {
     const pipe: Pipe = {
       top: true,
@@ -362,6 +390,7 @@ describe("translateFromPipeToShape function", () => {
 })
 
 describe("transformShapeGridToPipeGrid function", () => {
+
   it("should work corectly", () => {
     const input: ShapeType[][] = [
       ["╸", "╺", "┏", "╸"],
@@ -460,6 +489,7 @@ describe("transformShapeGridToPipeGrid function", () => {
 });
 
 describe("rotatePipe function", () => {
+
   it("should work properly case", () => {
     const input: Pipe = {
       top: false,
@@ -487,12 +517,14 @@ describe("rotatePipe function", () => {
 });
 
 describe("appendRotateMessage function", () => {
+
   it("should work properly on first move", () => {
     const input = "rotate";
     const expected = "rotate 5 3";
     const result = appendRotateMessage(input, 5, 3);
     expect(result).toEqual(expected);
   });
+
   it("should work properly on later moves", () => {
     const input = "rotate 5 3\n2 4";
     const expected = "rotate 5 3\n2 4\n6 4";
@@ -502,11 +534,13 @@ describe("appendRotateMessage function", () => {
 });
 
 describe("calculateRotationCount function", () => {
+
   it("should work when passed same numbers", () => {
     const expected = 0;
     const result = calculateRotationCount(90, 90);
     expect(result).toBe(expected);
   });
+
   it("should work when 3 rotations needed", () => {
     const expected = 3;
     const result = calculateRotationCount(180, 90);
@@ -515,6 +549,7 @@ describe("calculateRotationCount function", () => {
 });
 
 describe("mustBeNotConnected function", () => {
+
   it("should work case 1 '┏'", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[1][1].allowedPositions = [90, 180];
@@ -522,6 +557,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(1, 1, "top", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 2", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[2][2].allowedPositions = [0, 180];
@@ -529,6 +565,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(2, 2, "left", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 3", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[3][3].allowedPositions = [0, 90, 180, 270];
@@ -536,6 +573,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(3, 3, "left", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 4", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[4][4].allowedPositions = [270];
@@ -543,6 +581,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(4, 4, "right", grid);
     expect(result).toBe(expected);
   });
+
   it("should work when all positions possible", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[5][5].allowedPositions = [0, 90, 180];
@@ -550,6 +589,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(5, 5, "left", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 6", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[6][6].allowedPositions = [90, 270];
@@ -557,6 +597,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(6, 6, "top", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 7", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[7][7].allowedPositions = [0, 270];
@@ -564,6 +605,7 @@ describe("mustBeNotConnected function", () => {
     const result = mustBeNotConnected(7, 7, "right", grid);
     expect(result).toBe(expected);
   });
+  
   it("should work case 8", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[4][0].allowedPositions = [0, 90];
@@ -574,6 +616,7 @@ describe("mustBeNotConnected function", () => {
 });
 
 describe("mustBeConnected function", () => {
+
   it("should work case 1", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[0][0].allowedPositions = [0, 90, 180, 270];
@@ -581,6 +624,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(0, 0, "right", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 2", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[1][1].allowedPositions = [0, 90];
@@ -588,6 +632,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(1, 1, "right", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 3", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[2][2].allowedPositions = [0, 90];
@@ -595,6 +640,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(2, 2, "top", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 4", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[3][3].allowedPositions = [270];
@@ -602,6 +648,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(3, 3, "left", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 5", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[4][4].allowedPositions = [90, 180, 270];
@@ -609,6 +656,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(4, 4, "bottom", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 6", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[5][5].allowedPositions = [90, 180, 270];
@@ -616,6 +664,7 @@ describe("mustBeConnected function", () => {
     const result = mustBeConnected(5, 5, "bottom", grid);
     expect(result).toBe(expected);
   });
+
   it("should work case 7", () => {
     const grid = cloneDeep(SAMPLE_PIPES);
     grid[6][6].allowedPositions = [180, 270];
@@ -626,26 +675,31 @@ describe("mustBeConnected function", () => {
 });
 
 describe("spliceOutPositions function", () => {
+
   it("should work when passed 1 position", () => {
     const expected = [0, 180, 270];
     const result = spliceOutPositions([0, 90, 180, 270], 90);
     expect(result).toEqual(expected);
   });
+
   it("should work when passed 2 positions case 1", () => {
     const expected = [0, 180];
     const result = spliceOutPositions([0, 180, 270], 270);
     expect(result).toEqual(expected);
   });
+
   it("should work when passed 2 positions", () => {
     const expected = [0];
     const result = spliceOutPositions([0, 90, 270], 90, 270);
     expect(result).toEqual(expected);
   });
+
   it("should work when passed 3 positions", () => {
     const expected = [270];
     const result = spliceOutPositions([0, 90, 180, 270], 0, 90, 180);
     expect(result).toEqual(expected);
   });
+
   it("should work when passed all positions", () => {
     const expected: Position[] = [];
     const result = spliceOutPositions([0, 90], 0, 90);
@@ -655,11 +709,13 @@ describe("spliceOutPositions function", () => {
 
 // --------------- CHECK LINE SHAPE -------------
 describe("checkLeft_Line function", () => {
+
   it("should work if there is no pipe on left", () => {
     const expected = [0];
     const result = checkLeft_Line(0, 3, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on left", () => {
     const expected = [0, 90, 180, 270];
     const result = checkLeft_Line(2, 5, SAMPLE_PIPES);
@@ -668,6 +724,7 @@ describe("checkLeft_Line function", () => {
 });
 
 describe("checkRight_Line function", () => {
+
   it("should work if there is no pipe on right", () => {
     const expected = [0];
     const input = [...SAMPLE_PIPES];
@@ -677,6 +734,7 @@ describe("checkRight_Line function", () => {
     const result = checkRight_Line(7, 0, input);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on right", () => {
     const expected = [0, 90, 180, 270];
     const result = checkRight_Line(5, 0, SAMPLE_PIPES);
@@ -685,11 +743,13 @@ describe("checkRight_Line function", () => {
 });
 
 describe("checkTop_Line function", () => {
+
   it("should work if there is no pipe on top", () => {
     const expected = [90];
     const result = checkTop_Line(5, 0, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on right", () => {
     const expected = [0, 90, 180, 270];
     const result = checkTop_Line(6, 3, SAMPLE_PIPES);
@@ -698,11 +758,13 @@ describe("checkTop_Line function", () => {
 });
 
 describe("checkBottom_Line function", () => {
+
   it("should work if there is no pipe on bottom", () => {
     const expected = [90];
     const result = checkBottom_Line(3, 7, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on right", () => {
     const expected = [0, 90, 180, 270];
     const result = checkBottom_Line(6, 3, SAMPLE_PIPES);
@@ -712,11 +774,13 @@ describe("checkBottom_Line function", () => {
 
 // --------------- CHECK TEE SHAPE -------------
 describe("checkLeft_Tee function", () => {
+
   it("should work if there is no pipe on left", () => {
     const expected = [90];
     const result = checkLeft_Tee(0, 7, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on left", () => {
     const expected = [0, 90, 180, 270];
     const result = checkLeft_Tee(1, 1, SAMPLE_PIPES);
@@ -725,11 +789,13 @@ describe("checkLeft_Tee function", () => {
 })
 
 describe("checkright_Tee function", () => {
+
   it("should work if there is no pipe on right", () => {
     const expected = [270];
     const result = checkRight_Tee(7, 6, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on right", () => {
     const expected = [0, 90, 180, 270];
     const result = checkRight_Tee(3, 1, SAMPLE_PIPES);
@@ -738,11 +804,13 @@ describe("checkright_Tee function", () => {
 })
 
 describe("checkTop_Tee function", () => {
+
   it("should work if there is no pipe on top", () => {
     const expected = [180];
     const result = checkTop_Tee(2, 0, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on top", () => {
     const expected = [0, 90, 180, 270];
     const result = checkTop_Tee(3, 1, SAMPLE_PIPES);
@@ -751,11 +819,13 @@ describe("checkTop_Tee function", () => {
 })
 
 describe("checkBottom_Tee function", () => {
+
   it("should work if there is no pipe on bottom", () => {
     const expected = [0];
     const result = checkBottom_Tee(2, 7, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on bottom", () => {
     const expected = [0, 90, 180, 270];
     const result = checkBottom_Tee(3, 1, SAMPLE_PIPES);
@@ -765,11 +835,13 @@ describe("checkBottom_Tee function", () => {
 
 // --------------- CHECK END SHAPE -------------
 describe("checkLeft_End function", () => {
+
   it("should work if there is no pipe on left", () => {
     const expected = [0, 90, 180];
     const result = checkLeft_End(0, 0, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is done pipe on left", () => {
     const output = cloneDeep(SAMPLE_PIPES);
     output[0][2].isDone=true;
@@ -779,19 +851,102 @@ describe("checkLeft_End function", () => {
     const result = checkLeft_End(3, 0, output);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on left", () => {
     const expected = [0, 90, 180, 270];
     const result = checkLeft_End(3, 0, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
 })
+
+describe("checkRight_End function", () => {
+  it("should work if there is no pipe on right", () => {
+    const expected = [0, 180, 270];
+    
+    const result = checkRight_End(7, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is done pipe on right", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[0][2].isDone=true;
+    output[0][2].allowedPositions=[180];
+
+    const expected = [90];
+    const result = checkRight_End(1, 0, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on right", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkRight_End(1, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkTop_End function", () => {
+
+  it("should work if there is no pipe on Top", () => {
+    const expected = [90, 180, 270];
+    const result = checkTop_End(1, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is done pipe on Top", () => {
+
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[6][7].isDone=true;
+    output[6][7].allowedPositions=[180];
+
+    const expected = [0];
+    const result = checkTop_End(7, 7, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on Top", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkTop_End(4, 3, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkBottom_End function", () => {
+
+  it("should work if there is no pipe on Bottom", () => {
+    const expected = [0, 90, 270];
+    
+    const result = checkBottom_End(6, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is done pipe on Top", () => {
+    
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[1][0].isDone=true;
+    output[1][0].allowedPositions=[0];
+
+    const expected = [180];
+    const result = checkBottom_End(0, 0, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on Top", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkBottom_End(0, 6, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+
 // --------------- CHECK ELBOW SHAPE -------------
 describe("checkLeft_Elbow function", () => {
+
   it("should work if there is no pipe on left", () => {
     const expected = [0, 90];
     const result = checkLeft_Elbow(0, 7, SAMPLE_PIPES);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is done pipe on left", () => {
     const output = cloneDeep(SAMPLE_PIPES);
     output[0][1].isDone=true;
@@ -801,6 +956,7 @@ describe("checkLeft_Elbow function", () => {
     const result = checkLeft_Elbow(2, 0, output);
     expect(result).toEqual(expected);
   });
+
   it("should work if there is not done pipe on left", () => {
     const expected = [0, 90, 180, 270];
     const result = checkLeft_Elbow(3, 0, SAMPLE_PIPES);
@@ -808,7 +964,80 @@ describe("checkLeft_Elbow function", () => {
   });
 })
 
+describe("checkRight_Elbow function", () => {
+  it("should work if there is no pipe on right", () => {
+    const expected = [180, 270];
+    
+    const result = checkRight_Elbow(7, 6, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
 
+  it("should work if there is done pipe on right", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[0][3].isDone=true;
+    output[0][3].allowedPositions=[270]
+
+    const expected = [0, 90];
+    const result = checkRight_Elbow(2, 0, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on right", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkRight_Elbow(4, 2, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkTop_Elbow function", () => {
+  it("should work if there is no pipe on top", () => {
+    const expected = [90, 180];
+    const result = checkTop_Elbow(2, 0, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is done pipe on top", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[0][1].isDone=true;
+    output[0][1].allowedPositions=[180]
+
+    const expected = [0, 270];
+    const result = checkTop_Elbow(1, 1, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on top", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkTop_Elbow(4, 2, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
+
+describe("checkBottom_Elbow function", () => {
+  it("should work if there is no pipe on bottom", () => {
+    const expected = [0, 270];
+    console.log(step2);
+    
+    const result = checkBottom_Elbow(2, 7, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is done pipe on bottom", () => {
+    const output = cloneDeep(SAMPLE_PIPES);
+    output[1][2].isDone=true;
+    output[1][2].allowedPositions=[0];
+
+    const expected = [90, 180];
+    const result = checkBottom_Elbow(2, 0, output);
+    expect(result).toEqual(expected);
+  });
+
+  it("should work if there is not done pipe on bottom", () => {
+    const expected = [0, 90, 180, 270];
+    const result = checkBottom_Elbow(4, 2, SAMPLE_PIPES);
+    expect(result).toEqual(expected);
+  });
+})
 
 
 describe("solve Pipe function", ()=> {
@@ -912,16 +1141,30 @@ describe('checkElbow function', () => {
 })
 
 describe('findNextCoordinates function', () => {
-  it('should find first not solved pipe and return pipe coordinates', () => {
+  it('should return 0, 0 coordinates if counter = 0', () => {
     const input = cloneDeep(SAMPLE_PIPES);
-  
     input[0][0].isDone=true;
     input[0][1].isDone=true;
     input[0][2].isDone=true;
-
+    const expected = {x:0, y:0}
+    const result = findNextCoordinates(0, 64, 0, 0, input);
+    expect(result).toEqual(expected);
+  });
+  it('should find first not solved pipe and return pipe coordinates', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+    input[0][0].isDone=true;
+    input[0][1].isDone=true;
+    input[0][2].isDone=true;
     const expected = {x:3, y:0}
-    
     const result = findNextCoordinates(64, 64, 0, 0, input);
+    expect(result).toEqual(expected);
+  });
+  
+  it('first coordinates after loop throught all elements, if all pipes is solved', () => {
+    const input = cloneDeep(SAMPLE_PIPES);
+    input.forEach(row => row.forEach(el => el.isDone = true))
+    const expected = {x:1, y:0}
+    const result = findNextCoordinates(1, 64, 0, 0, input);
     expect(result).toEqual(expected);
   });
 })
