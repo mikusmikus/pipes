@@ -82,11 +82,6 @@ function App() {
     mapAsString.current = info;
   };
 
-  // string to bytes
-  // const byteCount = (s: string) => {
-  //   return encodeURI(s).split(/%..|./).length - 1;
-  // };
-
   useEffect(() => {
     if (grid.length && autoSolve) {
       const { x, y } = findNextCoordinates(
@@ -263,7 +258,6 @@ function App() {
   };
 
   const stopAutoSolve = () => {
-    console.log('stopped');
     
     clearTimeout(timeOut.current!);
     setAutoSolve(false);
