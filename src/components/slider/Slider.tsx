@@ -11,6 +11,9 @@ type Props = {
 const Slider: FC<Props> = ({ min = 0, max = 4, value, onChange }) => {
   return (
     <div className='row'>
+      <div className="col-xs-12 center-xs">
+        auto solve speed
+      </div>
       <div className='col-xs-2 end-xs col-xs-offset-1'>slower</div>
       <div className='col-xs-6'>
         <div className={style.slider}>

@@ -1016,7 +1016,6 @@ describe("checkTop_Elbow function", () => {
 describe("checkBottom_Elbow function", () => {
   it("should work if there is no pipe on bottom", () => {
     const expected = [0, 270];
-    console.log(step2);
     
     const result = checkBottom_Elbow(2, 7, SAMPLE_PIPES);
     expect(result).toEqual(expected);

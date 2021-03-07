@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import Button from "../button/Button";
 import style from "./rules.module.scss";
 
