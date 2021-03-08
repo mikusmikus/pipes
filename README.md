@@ -1,4 +1,4 @@
-# Pipes game Evolutin gaming task!
+# Evolution gaming Pipes game task!
 https://youthful-pare-dcc9fe.netlify.app/
 
 
